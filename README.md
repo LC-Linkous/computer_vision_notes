@@ -98,7 +98,7 @@ Below are two screenshots of the GUI frame with a live video feed. The two image
 </p>
 
 <p align="center">
-        <img src="media/himmelblau_plots.png" alt=" Sample of visualization using a GUI with live video feed and POI detection " height="300">
+        <img src="media/imgs/GUI_sample2.PNG" alt=" Sample of visualization using a GUI with live video feed and POI detection " height="300">
 </p>
 
 
