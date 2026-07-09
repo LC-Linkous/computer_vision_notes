@@ -12,6 +12,7 @@
 ##--------------------------------------------------------------------\
 
 import threading
+import time
 
 
 class StereoCaptureThread(threading.Thread):
@@ -29,6 +30,9 @@ class StereoCaptureThread(threading.Thread):
         while self._running.is_set():
             ok, left, right = self.camera.read()
             if not ok:
+                # Don't busy-spin a core if the camera is unplugged,
+                # failed to open, or is mid-reconnect.
+                time.sleep(0.05)
                 continue
             with self._lock:
                 self._latest = (left, right)

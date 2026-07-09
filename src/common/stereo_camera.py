@@ -47,3 +47,47 @@ class StereoCamera:
 
     def release(self):
         self.capture.release()
+
+
+def probe_cameras(max_index=8):
+    """Scan device indices and report what's connected.
+
+    Returns a list of dicts:
+        {index, width, height, mean_brightness, looks_stereo}
+
+    looks_stereo is a heuristic: side-by-side stereo frames are very
+    wide (1280x480 -> 2.67:1, 3840x1080 -> 3.56:1) while normal webcams
+    are ~1.33-1.78:1. mean_brightness near 0 means the device is
+    delivering black frames (covered lens, privacy shutter, IR cam).
+    """
+    try:  # quiet the "can't open camera N" spam while probing
+        cv2.utils.logging.setLogLevel(cv2.utils.logging.LOG_LEVEL_ERROR)
+    except AttributeError:
+        pass
+
+    found = []
+    for i in range(max_index):
+        cap = cv2.VideoCapture(i)
+        if cap.isOpened():
+            ok, frame = cap.read()
+            if ok and frame is not None:
+                h, w = frame.shape[:2]
+                found.append({
+                    "index": i,
+                    "width": w,
+                    "height": h,
+                    "mean_brightness": float(frame.mean()),
+                    "looks_stereo": (w / h) >= 2.5,
+                })
+        cap.release()
+    return found
+
+
+def describe_camera(info):
+    """One-line human-readable label for a probe_cameras() entry."""
+    label = f"Camera {info['index']} — {info['width']}x{info['height']}"
+    if info["looks_stereo"]:
+        label += "  [stereo?]"
+    if info["mean_brightness"] < 5:
+        label += "  [black frames]"
+    return label
