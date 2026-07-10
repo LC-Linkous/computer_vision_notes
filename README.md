@@ -6,7 +6,8 @@ I originally took a computer vision course in 2020. For our semester project, we
 
 This repository will track project progress and serve as development notes as I work from collecting data myself with the USB camera and working up to SLAM mapping. I plan to include an updated study of how the libraries (in both MATLAB and Python) have changed over the last 5 years and what kind of updates there's been.
 
-This is a fun side project with occasional updates, nothing serious.
+This is a fun side project with occasional updates, nothing serious. Note: AI has been used to clean up the example code and READMEs. This makes them look very pretty, but there are still some very human errors in there that I'm working out as I go
+through the object tracking process in detail.
 
 
 ## Table of Contents
@@ -139,11 +140,12 @@ produced by Example 2.
 Conceptually: Example 1 matches *across the stereo pair* (gives depth at one
 instant), Example 4 matches *across time* (gives motion of points), and Example 5
 combines both to ask the inverse question -- if the points didn't move, how did
-the *camera* move? Example 6 then stops throwing information away: instead of
-treating every frame independently, it keeps keyframes and a persistent set of
-landmarks that can be re-observed, which is the data structure a SLAM back-end
-operates on. Full SLAM adds that back-end (loop closure, pose graph optimization,
-bundle adjustment) on top.
+the *camera* move? 
+
+Example 5 is currently buggy (even though the AI cleanup makes it look pretty and complete), 
+and it needs some work for capture, processing, and display. It's likely the tipping point 
+of needing to split the examples into multiple files and plan a more solid based to continue 
+work on rather than using stand-alone, single files.
 
 
 ## Shared Code (`src/common/`)
